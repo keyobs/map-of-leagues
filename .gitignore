@@ -17,6 +17,7 @@ dist-ssr
 *.local
 lerna-debug.log*
 .eslintcache
+.editorconfig
 
 *.tgz
 .env
