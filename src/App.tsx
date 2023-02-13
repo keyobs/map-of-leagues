@@ -1,4 +1,4 @@
-import './App.css';
+import './app.css';
 import { Route, Routes } from 'react-router-dom';
 
 import NavBar from '@components/NavBar';
@@ -8,7 +8,7 @@ import LoginPage from '@pages/Login';
 
 function App() {
     return (
-        <div className="App">
+        <div className="app">
             <NavBar />
             <Router />
         </div>

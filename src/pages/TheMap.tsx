@@ -1,4 +1,4 @@
 const TheMapPage = () => {
-    return <div>The map</div>;
+    return <div style={{ width: '100vw' }}>The map</div>;
 };
 export default TheMapPage;
