@@ -21,8 +21,9 @@
     "jsx": "react-jsx",
 
     "types": ["node"],
+
     "paths": {
-      "@/*": ["./src/*"]
+      "@*": ["./src/*"]
     }
   },
 
@@ -30,4 +31,5 @@
   "extends": "./tsconfig.paths.json",
 
   "references": [{ "path": "./tsconfig.node.json" }]
+
 }
