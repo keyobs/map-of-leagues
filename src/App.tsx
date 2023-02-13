@@ -1,6 +1,8 @@
 import './app.css';
 import { Route, Routes } from 'react-router-dom';
 
+import './languages/i18nConfig';
+
 import NavBar from '@components/NavBar';
 import TheMapPage from '@pages/TheMap';
 import AboutPage from '@pages/About';
