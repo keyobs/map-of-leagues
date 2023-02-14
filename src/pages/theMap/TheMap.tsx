@@ -6,9 +6,7 @@ import { MapContainer, TileLayer } from 'react-leaflet';
 const TheMapPage = () => {
     return (
         <div className="theMap">
-            <span>{t('tag')}</span>
-
-            <div className="leaflet">
+            <div className="leafletContainer">
                 <MapContainer
                     center={[47.4, 7.7]}
                     zoom={5}
