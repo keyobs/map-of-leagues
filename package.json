@@ -25,6 +25,9 @@
         "not op_mini all"
     ],
     "dependencies": {
+        "@emotion/react": "^11.10.5",
+        "@emotion/styled": "^11.10.5",
+        "@mui/material": "^5.11.8",
         "i18next": "^22.4.9",
         "i18next-browser-languagedetector": "^7.0.1",
         "leaflet": "^1.9.3",
