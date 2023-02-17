@@ -1,13 +1,19 @@
 import './theMap.less';
-import { t } from 'i18next';
 
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import { leagueData } from '@templates/mocks';
 import { useState } from 'react';
-import { Button, Drawer } from '@mui/material';
+import { t } from 'i18next';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+
+import { leagueData } from '@templates/mocks';
+
+import Button from '@mui/material/Button';
+import Drawer from '@mui/material/Drawer';
+import TextField from '@mui/material/TextField';
+
+type TEvent = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
 
 const TheMapPage = () => {
-    const [isOpen, setIsOpen] = useState<boolean>(false);
+    const [isOpen, setIsOpen] = useState<boolean>(true);
     const onClose = () => setIsOpen(false);
     const addALeague = () => {
         setIsOpen(true);
@@ -41,7 +47,6 @@ const Cockpit = (props: TCockpit) => {
 
 const Map = () => {
     const [activeMark, setActiveMark] = useState<string | null>(null);
-    console.log(activeMark);
 
     return (
         <MapContainer center={[47.4, 7.7]} zoom={5} scrollWheelZoom={false}>
@@ -74,9 +79,39 @@ interface TCreateEditLeagueDrawer {
 const CreateEditLeagueDrawer = (props: TCreateEditLeagueDrawer) => {
     const { isOpen, onClose } = props;
 
+    const [leagueForm, setLeagueForm] = useState({
+        name: '',
+    });
+
+    const onChangeTextField = (event: TEvent) => {
+        const { value, id } = event.target;
+        setLeagueForm((state) => ({ ...state, [id]: value }));
+    };
+
     return (
-        <Drawer open={isOpen} anchor="right" onClose={onClose}>
-            <div>Hop hop</div>
+        <Drawer
+            ModalProps={{ disableScrollLock: false }}
+            open={isOpen}
+            anchor="left"
+            onClose={onClose}
+            BackdropProps={{ invisible: true }}
+        >
+            <div className="leagueDrawer">
+                <header>{t('league_form_title')}</header>
+
+                <form>
+                    <TextField
+                        id="name"
+                        className="textField"
+                        label={t('league_form_field_label_name')}
+                        value={leagueForm.name}
+                        onChange={(event: TEvent) => onChangeTextField(event)}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                    />
+                </form>
+            </div>
         </Drawer>
     );
 };
