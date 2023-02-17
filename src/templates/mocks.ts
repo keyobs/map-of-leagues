@@ -1,4 +1,4 @@
-type TLeague = {
+export type TLeague = {
     id: string;
     name: string;
     coordinates: [number, number];
