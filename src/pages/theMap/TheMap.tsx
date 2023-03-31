@@ -14,15 +14,17 @@ type TEvent = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
 
 const TheMapPage = () => {
     const [isOpen, setIsOpen] = useState<boolean>(true);
+
     const onClose = () => setIsOpen(false);
-    const addALeague = () => {
+
+    const openNewLeagueDrawer = () => {
         setIsOpen(true);
     };
 
     return (
         <div className="theMap">
             <div className="cockpit">
-                <Cockpit addALeague={addALeague} />
+                <Cockpit openNewLeagueDrawer={openNewLeagueDrawer} />
             </div>
             <div className="leafletContainer">
                 <Map />
@@ -34,12 +36,12 @@ const TheMapPage = () => {
 export default TheMapPage;
 
 interface TCockpit {
-    addALeague: () => void;
+    openNewLeagueDrawer: () => void;
 }
 const Cockpit = (props: TCockpit) => {
-    const { addALeague } = props;
+    const { openNewLeagueDrawer } = props;
     return (
-        <Button variant="contained" onClick={() => addALeague()}>
+        <Button variant="contained" onClick={() => openNewLeagueDrawer()}>
             ADD A LEAGUE
         </Button>
     );
@@ -83,6 +85,7 @@ const CreateEditLeagueDrawer = (props: TCreateEditLeagueDrawer) => {
         name: '',
     });
 
+
     const onChangeTextField = (event: TEvent) => {
         const { value, id } = event.target;
         setLeagueForm((state) => ({ ...state, [id]: value }));
@@ -110,6 +113,7 @@ const CreateEditLeagueDrawer = (props: TCreateEditLeagueDrawer) => {
                             shrink: true,
                         }}
                     />
+
                 </form>
             </div>
         </Drawer>
