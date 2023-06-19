@@ -13,6 +13,7 @@ export default defineConfig({
             '@components': path.resolve(projectRootDir, './src/components'),
             '@pages': path.resolve(projectRootDir, './src/pages'),
             '@templates': path.resolve(projectRootDir, './src/templates'),
+            '@api': path.resolve(projectRootDir, './src/api'),
         },
     },
 });
