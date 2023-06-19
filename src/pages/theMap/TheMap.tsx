@@ -113,7 +113,16 @@ const CreateEditLeagueDrawer = (props: TCreateEditLeagueDrawer) => {
                             shrink: true,
                         }}
                     />
-
+                    <TextField
+                        id="city"
+                        className="textField"
+                        label={t('league_form_field_label_city')}
+                        value={leagueForm.city}
+                        onChange={(event: TEvent) => onChangeTextField(event)}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                    />
                 </form>
             </div>
         </Drawer>
