@@ -8,10 +8,10 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { leagueData, TLeague } from '@templates/mocks';
 
 import Cockpit from '@components/cockpit/Cockpit';
-import DrawerCreateEditLeague from '@components/DrawerCreateEditLeague';
+import DrawerCreateEditLeague from '@components/Drawer/DrawerCreateEditLeague';
 
 const TheMapPage = () => {
-    const [isOpen, setIsOpen] = useState<boolean>(true);
+    const [isOpen, setIsOpen] = useState<boolean>(false);
 
     const { markersList, addMarker } = useMarkers();
 
