@@ -126,13 +126,10 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
 
     function onSubmit() {
         if (!wasFormSubmitted) setWasFormSubmitted(true);
-
         if (citiesQuery.data == null) return;
-        if (leagueLocation.placeId === '') return;
-        if (city == null) return;
-        if (leagueName === '') return;
+        if (invalidFields.length !== 0) return;
         else {
-            const payload = buildFormPayload(city);
+            const payload = buildFormPayload(city!);
             addMarker(payload);
             handleClose;
         }
@@ -167,6 +164,10 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
                         InputLabelProps={{
                             shrink: true,
                         }}
+                        error={invalidFields.includes('leagueName')}
+                        helperText={t(
+                            'league_form_field_label_name_error_message'
+                        )}
                     />
 
                     <Autocomplete
@@ -187,6 +188,10 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
                             <TextField
                                 {...params}
                                 label={t('league_form_field_label_city')}
+                                error={invalidFields.includes('leagueLocation')}
+                                helperText={t(
+                                    'league_form_field_label_name_error_city'
+                                )}
                             />
                         )}
                     />
