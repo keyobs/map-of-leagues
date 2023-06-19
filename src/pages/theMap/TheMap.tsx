@@ -86,14 +86,15 @@ interface TCreateEditLeagueDrawer {
 const CreateEditLeagueDrawer = (props: TCreateEditLeagueDrawer) => {
     const { isOpen, onClose } = props;
 
-    const [leagueForm, setLeagueForm] = useState({
-        name: '',
-        city: '',
+    const [leagueName, setLeagueName] = useState<string>('');
+    const [leagueCity, setLeagueCity] = useState<TCitiesAutocompleteOptions>({
+        placeId: '',
+        label: '',
     });
 
-    const onChangeTextField = (event: TEvent) => {
-        const { value, id } = event.target;
-        setLeagueForm((state) => ({ ...state, [id]: value }));
+    const onChangeCity = (event: TEvent) => {
+        const { value } = event.target;
+        setLeagueCity((state) => ({ ...state, label: value }));
     };
 
     const onSearchCity = (args: TCityAutocompletePayload) => {
@@ -101,16 +102,16 @@ const CreateEditLeagueDrawer = (props: TCreateEditLeagueDrawer) => {
     };
 
     const citiesQuery = useQuery(
-        ['cities', leagueForm.city],
-        () => onSearchCity({ text: leagueForm.city }),
+        ['cities', leagueCity],
+        () => onSearchCity({ text: leagueCity.label }),
         {
             enabled: false,
         }
     );
 
     useEffect(() => {
-        if (leagueForm.city !== '') citiesQuery.refetch();
-    }, [leagueForm]);
+        if (leagueCity.label !== '') citiesQuery.refetch();
+    }, [leagueCity]);
 
     type TCitiesAutocompleteOptions = {
         placeId: string;
@@ -144,8 +145,10 @@ const CreateEditLeagueDrawer = (props: TCreateEditLeagueDrawer) => {
                         id="name"
                         className="textField"
                         label={t('league_form_field_label_name')}
-                        value={leagueForm.name}
-                        onChange={(event: TEvent) => onChangeTextField(event)}
+                        value={leagueName}
+                        onChange={(event: TEvent) =>
+                            setLeagueName(event.target.value)
+                        }
                         InputLabelProps={{
                             shrink: true,
                         }}
@@ -154,8 +157,8 @@ const CreateEditLeagueDrawer = (props: TCreateEditLeagueDrawer) => {
                         id="city"
                         className="textField"
                         label={t('league_form_field_label_city')}
-                        value={leagueForm.city}
-                        onChange={(event: TEvent) => onChangeTextField(event)}
+                        value={leagueCity.label}
+                        onChange={(event: TEvent) => onChangeCity(event)}
                         InputLabelProps={{
                             shrink: true,
                         }}
