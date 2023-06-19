@@ -1,6 +1,7 @@
 import Drawer from '@mui/material/Drawer';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
+import Button from '@mui/material/Button';
 
 import { useState, useEffect, useCallback } from 'react';
 import { t } from 'i18next';
@@ -22,16 +23,17 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
     const { isOpen, onClose } = props;
 
     const [leagueName, setLeagueName] = useState<string>('');
-    const [leagueCity, setLeagueCity] = useState<TCitiesAutocompleteOption>({
-        placeId: '',
-        label: '',
-        city: '',
-    });
+    const [leagueLocation, setLeagueLocation] =
+        useState<TCitiesAutocompleteOption>({
+            placeId: '',
+            label: '',
+            city: '',
+        });
 
     const onChangeCityLabel = (newValue: string | null) => {
         newValue === null
-            ? setLeagueCity({ placeId: '', label: '', city: '' })
-            : setLeagueCity((state) => ({
+            ? setLeagueLocation({ placeId: '', label: '', city: '' })
+            : setLeagueLocation((state) => ({
                   ...state,
                   ['label']: newValue,
                   ['city']: newValue,
@@ -42,8 +44,8 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
         newOption: TCitiesAutocompleteOption | null
     ) => {
         return newOption === null
-            ? setLeagueCity({ placeId: '', label: '', city: '' })
-            : setLeagueCity(() => newOption);
+            ? setLeagueLocation({ placeId: '', label: '', city: '' })
+            : setLeagueLocation(() => newOption);
     };
 
     const onSearchCity = (args: TCityAutocompletePayload) => {
@@ -51,21 +53,21 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
     };
 
     const citiesQuery = useQuery(
-        ['cities', leagueCity],
-        () => onSearchCity({ text: leagueCity.city }),
+        ['cities', leagueLocation],
+        () => onSearchCity({ text: leagueLocation.city }),
         {
             enabled: false,
         }
     );
 
     const debounceGetCities = useCallback(
-        debounce(() => citiesQuery.refetch(), 1500),
+        debounce(() => citiesQuery.refetch(), 500),
         []
     );
 
     useEffect(() => {
-        if (leagueCity.city !== '') debounceGetCities();
-    }, [leagueCity]);
+        if (leagueLocation.city !== '') debounceGetCities();
+    }, [leagueLocation]);
 
     type TCitiesAutocompleteOption = {
         placeId: string;
@@ -82,6 +84,23 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
         }
         return [];
     };
+
+    function onSubmit() {
+        if (citiesQuery.data == null) return;
+        if (leagueLocation.placeId === '') return;
+
+        const city = citiesQuery.data.results.find(
+            (result) => result.place_id === leagueLocation.placeId
+        );
+
+        const payload = {
+            name: leagueName,
+            id: leagueLocation.placeId,
+            coordinates: city && [city.lat, city.lon],
+        };
+
+        console.log(payload);
+    }
 
     return (
         <Drawer
@@ -118,7 +137,7 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
                         id="city_autocomplete"
                         options={cityAutocompleteOptions()}
                         getOptionLabel={(option) => option.label}
-                        value={leagueCity}
+                        value={leagueLocation}
                         isOptionEqualToValue={(option, value) =>
                             option.placeId === value.placeId
                         }
@@ -136,6 +155,12 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
                         )}
                     />
                 </form>
+
+                <div>
+                    <Button variant="contained" onClick={onSubmit}>
+                        <span>{t('league_form_button_submit')}</span>
+                    </Button>
+                </div>
             </div>
         </Drawer>
     );
