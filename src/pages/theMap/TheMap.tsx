@@ -93,11 +93,18 @@ const CreateEditLeagueDrawer = (props: TCreateEditLeagueDrawer) => {
         label: '',
     });
 
-    const onChangeCityLabel = (newValue: string) => {
-        console.log('newValue', newValue);
+    const onChangeCityLabel = (newValue: string | null) => {
         newValue === null
-            ? setLeagueCity({ placeId: 'fluff', label: 'gimbam' })
+            ? setLeagueCity({ placeId: '', label: '' })
             : setLeagueCity((state) => ({ ...state, ['label']: newValue }));
+    };
+
+    const onChooseCityOption = (
+        newOption: TCitiesAutocompleteOption | null
+    ) => {
+        newOption === null
+            ? setLeagueCity({ placeId: '', label: '' })
+            : setLeagueCity(() => newOption);
     };
 
     const onSearchCity = (args: TCityAutocompletePayload) => {
@@ -113,7 +120,8 @@ const CreateEditLeagueDrawer = (props: TCreateEditLeagueDrawer) => {
     );
 
     useEffect(() => {
-        if (leagueCity.label !== '') citiesQuery.refetch();
+        if (leagueCity.placeId === '' && leagueCity.label !== '')
+            citiesQuery.refetch();
     }, [leagueCity]);
 
     type TCitiesAutocompleteOption = {
@@ -124,7 +132,7 @@ const CreateEditLeagueDrawer = (props: TCreateEditLeagueDrawer) => {
         if (citiesQuery.data) {
             return citiesQuery.data.results.map((matchingResult) => ({
                 placeId: matchingResult.place_id,
-                label: `${matchingResult.city} (${matchingResult.county}) - ${matchingResult.country}`,
+                label: matchingResult.formatted,
             }));
         }
         return [];
@@ -165,6 +173,9 @@ const CreateEditLeagueDrawer = (props: TCreateEditLeagueDrawer) => {
                         }
                         onInputChange={(event, newValue) =>
                             onChangeCityLabel(newValue)
+                        }
+                        onChange={(event, newValue) =>
+                            onChooseCityOption(newValue)
                         }
                         renderInput={(params) => (
                             <TextField
