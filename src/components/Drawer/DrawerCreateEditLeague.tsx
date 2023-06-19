@@ -70,7 +70,7 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
     };
 
     const onSearchCity = (args: TCityAutocompletePayload) => {
-        return getCityAutocomplete(args);
+        if (args.text.length > 0) return getCityAutocomplete(args);
     };
 
     const debounceGetCities = useCallback(
@@ -79,7 +79,7 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
     );
 
     useEffect(() => {
-        if (leagueLocation.city !== '') debounceGetCities();
+        debounceGetCities();
     }, [leagueLocation]);
 
     type TCitiesAutocompleteOption = {
