@@ -111,6 +111,19 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
         onClose();
     }
 
+    const invalidFields = useMemo(() => {
+        if (!wasFormSubmitted) return [];
+        return checkPayloadValidity();
+    }, [leagueName, leagueLocation, city]);
+
+    function checkPayloadValidity() {
+        const invalidFields = [];
+        if (leagueName === '') invalidFields.push('leagueName');
+        if (leagueLocation.label === '') invalidFields.push('leagueLocation');
+        if (city == null) invalidFields.push('cityQuery');
+        return invalidFields;
+    }
+
     function onSubmit() {
         if (!wasFormSubmitted) setWasFormSubmitted(true);
 
