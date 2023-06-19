@@ -1,3 +1,5 @@
+import './drawerCreateEditLeague.less';
+
 import Drawer from '@mui/material/Drawer';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -141,7 +143,6 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
             open={isOpen}
             anchor="left"
             onClose={handleClose}
-            BackdropProps={{ invisible: true }}
         >
             <div className="leagueDrawer">
                 <header>{t('league_form_title')}</header>
@@ -197,7 +198,7 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
                     />
                 </form>
 
-                <div>
+                <div className="actions">
                     <Button variant="contained" onClick={onSubmit}>
                         <span>{t('league_form_button_submit')}</span>
                     </Button>
