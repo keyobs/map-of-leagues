@@ -13,14 +13,16 @@ import {
     getCityAutocomplete,
 } from '@api/geoapify/getCityAutocomplete';
 
+import { TLeague } from '@templates/mocks';
 type TEvent = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
 
 interface TCreateEditLeagueDrawer {
     isOpen: boolean;
     onClose: () => void;
+    addMarker: (marker: TLeague) => void;
 }
 const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
-    const { isOpen, onClose } = props;
+    const { isOpen, onClose, addMarker } = props;
 
     const [leagueName, setLeagueName] = useState<string>('');
     const [leagueLocation, setLeagueLocation] =
@@ -93,13 +95,15 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
             (result) => result.place_id === leagueLocation.placeId
         );
 
-        const payload = {
+        if (city == null) return;
+
+        const payload: TLeague = {
             name: leagueName,
             id: leagueLocation.placeId,
-            coordinates: city && [city.lat, city.lon],
+            coordinates: [city.lat, city.lon],
         };
 
-        console.log(payload);
+        addMarker(payload);
     }
 
     return (
