@@ -112,7 +112,21 @@ const CreateEditLeagueDrawer = (props: TCreateEditLeagueDrawer) => {
         if (leagueForm.city !== '') citiesQuery.refetch();
     }, [leagueForm]);
 
-    console.log(citiesQuery);
+    type TCitiesAutocompleteOptions = {
+        placeId: string;
+        label: string;
+    };
+    const cityAutocompleteOptions = (): TCitiesAutocompleteOptions[] => {
+        if (citiesQuery.data) {
+            return citiesQuery.data.results.map((matchingResult) => ({
+                placeId: matchingResult.place_id,
+                label: `${matchingResult.city} (${matchingResult.county}) - ${matchingResult.country}`,
+            }));
+        }
+        return [];
+    };
+
+    console.log(cityAutocompleteOptions());
 
     return (
         <Drawer
