@@ -104,6 +104,13 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
         };
     }
 
+    function handleClose() {
+        setLeagueName('');
+        setLeagueLocation({ placeId: '', label: '', city: '' });
+        setWasFormSubmitted(false);
+        onClose();
+    }
+
     function onSubmit() {
         if (!wasFormSubmitted) setWasFormSubmitted(true);
 
@@ -114,6 +121,7 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
         else {
             const payload = buildFormPayload(city);
             addMarker(payload);
+            handleClose;
         }
     }
 
@@ -122,7 +130,7 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
             ModalProps={{ disableScrollLock: false }}
             open={isOpen}
             anchor="left"
-            onClose={onClose}
+            onClose={handleClose}
             BackdropProps={{ invisible: true }}
         >
             <div className="leagueDrawer">
