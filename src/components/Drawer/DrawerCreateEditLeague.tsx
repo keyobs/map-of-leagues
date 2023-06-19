@@ -3,7 +3,7 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { t } from 'i18next';
 import { useQuery } from 'react-query';
 import { debounce } from 'lodash';
@@ -98,17 +98,20 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
         };
     }
 
+    const city = useMemo(() => {
+        if (citiesQuery.data == null) return;
+        return citiesQuery.data.results.find(
+            (result) => result.place_id === leagueLocation.placeId
+        );
+    }, [citiesQuery.data, leagueLocation.placeId]);
+
     function onSubmit() {
         if (!wasFormSubmitted) setWasFormSubmitted(true);
 
         if (citiesQuery.data == null) return;
         if (leagueLocation.placeId === '') return;
-
-        const city: TLocationResult | undefined = citiesQuery.data.results.find(
-            (result) => result.place_id === leagueLocation.placeId
-        );
-
-        if (city === undefined) return;
+        if (city == null) return;
+        if (leagueName === '') return;
         else {
             const payload = buildFormPayload(city);
             addMarker(payload);
