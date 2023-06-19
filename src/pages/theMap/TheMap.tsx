@@ -1,6 +1,6 @@
 import './theMap.less';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { t } from 'i18next';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
@@ -9,6 +9,10 @@ import { leagueData } from '@templates/mocks';
 import Button from '@mui/material/Button';
 import Drawer from '@mui/material/Drawer';
 import TextField from '@mui/material/TextField';
+import {
+    TCityAutocompletePayload,
+    getCityAutocomplete,
+} from '@api/geoapify/geoApify';
 
 type TEvent = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
 
@@ -83,13 +87,21 @@ const CreateEditLeagueDrawer = (props: TCreateEditLeagueDrawer) => {
 
     const [leagueForm, setLeagueForm] = useState({
         name: '',
+        city: '',
     });
-
 
     const onChangeTextField = (event: TEvent) => {
         const { value, id } = event.target;
         setLeagueForm((state) => ({ ...state, [id]: value }));
     };
+
+    const onSearchCity = (args: TCityAutocompletePayload) => {
+        return getCityAutocomplete(args);
+    };
+
+    useEffect(() => {
+        if (leagueForm.city !== '') onSearchCity({ text: leagueForm.city });
+    }, [leagueForm]);
 
     return (
         <Drawer
