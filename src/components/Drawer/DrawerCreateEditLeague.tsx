@@ -10,6 +10,7 @@ import { debounce } from 'lodash';
 
 import {
     TCityAutocompletePayload,
+    TLocationResult,
     getCityAutocomplete,
 } from '@api/geoapify/getCityAutocomplete';
 
@@ -87,23 +88,27 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
         return [];
     };
 
-    function onSubmit() {
-        if (citiesQuery.data == null) return;
-        if (leagueLocation.placeId === '') return;
-
-        const city = citiesQuery.data.results.find(
-            (result) => result.place_id === leagueLocation.placeId
-        );
-
-        if (city == null) return;
-
-        const payload: TLeague = {
+    function buildFormPayload(city: TLocationResult): TLeague {
+        return {
             name: leagueName,
             id: leagueLocation.placeId,
             coordinates: [city.lat, city.lon],
         };
+    }
 
-        addMarker(payload);
+    function onSubmit() {
+        if (citiesQuery.data == null) return;
+        if (leagueLocation.placeId === '') return;
+
+        const city: TLocationResult | undefined = citiesQuery.data.results.find(
+            (result) => result.place_id === leagueLocation.placeId
+        );
+
+        if (city === undefined) return;
+        else {
+            const payload = buildFormPayload(city);
+            addMarker(payload);
+        }
     }
 
     return (
