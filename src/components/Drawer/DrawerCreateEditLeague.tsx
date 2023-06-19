@@ -133,7 +133,7 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
         else {
             const payload = buildFormPayload(city!);
             addMarker(payload);
-            handleClose;
+            handleClose();
         }
     }
 
