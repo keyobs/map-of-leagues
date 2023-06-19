@@ -82,7 +82,13 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
             <div className="leagueDrawer">
                 <header>{t('league_form_title')}</header>
 
-                <form>
+                <form
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '20px',
+                    }}
+                >
                     <TextField
                         id="name"
                         className="textField"
