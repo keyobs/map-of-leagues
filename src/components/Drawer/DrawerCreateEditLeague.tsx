@@ -25,6 +25,7 @@ interface TCreateEditLeagueDrawer {
 const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
     const { isOpen, onClose, addMarker } = props;
 
+    const [wasFormSubmitted, setWasFormSubmitted] = useState<boolean>(false);
     const [leagueName, setLeagueName] = useState<string>('');
     const [leagueLocation, setLeagueLocation] =
         useState<TCitiesAutocompleteOption>({
@@ -33,7 +34,20 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
             city: '',
         });
 
-    const [wasFormSubmitted, setWasFormSubmitted] = useState<boolean>(false);
+    const citiesQuery = useQuery(
+        ['cities', leagueLocation],
+        () => onSearchCity({ text: leagueLocation.city }),
+        {
+            enabled: false,
+        }
+    );
+
+    const city = useMemo(() => {
+        if (citiesQuery.data == null) return;
+        return citiesQuery.data.results.find(
+            (result) => result.place_id === leagueLocation.placeId
+        );
+    }, [citiesQuery.data, leagueLocation.placeId]);
 
     const onChangeCityLabel = (newValue: string | null) => {
         newValue === null
@@ -56,14 +70,6 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
     const onSearchCity = (args: TCityAutocompletePayload) => {
         return getCityAutocomplete(args);
     };
-
-    const citiesQuery = useQuery(
-        ['cities', leagueLocation],
-        () => onSearchCity({ text: leagueLocation.city }),
-        {
-            enabled: false,
-        }
-    );
 
     const debounceGetCities = useCallback(
         debounce(() => citiesQuery.refetch(), 500),
@@ -97,13 +103,6 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
             coordinates: [city.lat, city.lon],
         };
     }
-
-    const city = useMemo(() => {
-        if (citiesQuery.data == null) return;
-        return citiesQuery.data.results.find(
-            (result) => result.place_id === leagueLocation.placeId
-        );
-    }, [citiesQuery.data, leagueLocation.placeId]);
 
     function onSubmit() {
         if (!wasFormSubmitted) setWasFormSubmitted(true);
