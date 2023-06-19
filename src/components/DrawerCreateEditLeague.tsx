@@ -2,9 +2,10 @@ import Drawer from '@mui/material/Drawer';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { t } from 'i18next';
 import { useQuery } from 'react-query';
+import { debounce } from 'lodash';
 
 import {
     TCityAutocompletePayload,
@@ -40,7 +41,6 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
     const onChooseCityOption = (
         newOption: TCitiesAutocompleteOption | null
     ) => {
-        console.log(newOption);
         return newOption === null
             ? setLeagueCity({ placeId: '', label: '', city: '' })
             : setLeagueCity(() => newOption);
@@ -58,8 +58,13 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
         }
     );
 
+    const debounceGetCities = useCallback(
+        debounce(() => citiesQuery.refetch(), 1500),
+        []
+    );
+
     useEffect(() => {
-        if (leagueCity.city !== '') citiesQuery.refetch();
+        if (leagueCity.city !== '') debounceGetCities();
     }, [leagueCity]);
 
     type TCitiesAutocompleteOption = {
