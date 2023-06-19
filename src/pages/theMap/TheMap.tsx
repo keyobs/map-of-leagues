@@ -5,10 +5,10 @@ import { useState, useEffect } from 'react';
 import { t } from 'i18next';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
-import { leagueData } from '@templates/mocks';
-import DrawerCreateEditLeague from '@components/DrawerCreateEditLeague';
+import { leagueData, TLeague } from '@templates/mocks';
 
-import { TLeague } from '@templates/mocks';
+import Cockpit from '@components/cockpit/Cockpit';
+import DrawerCreateEditLeague from '@components/DrawerCreateEditLeague';
 
 const TheMapPage = () => {
     const [isOpen, setIsOpen] = useState<boolean>(true);
@@ -38,18 +38,6 @@ const TheMapPage = () => {
     );
 };
 export default TheMapPage;
-
-interface TCockpit {
-    openNewLeagueDrawer: () => void;
-}
-const Cockpit = (props: TCockpit) => {
-    const { openNewLeagueDrawer } = props;
-    return (
-        <Button variant="contained" onClick={() => openNewLeagueDrawer()}>
-            ADD A LEAGUE
-        </Button>
-    );
-};
 
 type TMap = {
     markersList: TLeague[] | [];
