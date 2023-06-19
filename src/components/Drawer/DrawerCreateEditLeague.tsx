@@ -33,6 +33,8 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
             city: '',
         });
 
+    const [wasFormSubmitted, setWasFormSubmitted] = useState<boolean>(false);
+
     const onChangeCityLabel = (newValue: string | null) => {
         newValue === null
             ? setLeagueLocation({ placeId: '', label: '', city: '' })
@@ -97,6 +99,8 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
     }
 
     function onSubmit() {
+        if (!wasFormSubmitted) setWasFormSubmitted(true);
+
         if (citiesQuery.data == null) return;
         if (leagueLocation.placeId === '') return;
 
