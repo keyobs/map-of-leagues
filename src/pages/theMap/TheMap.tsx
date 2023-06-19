@@ -12,7 +12,7 @@ import TextField from '@mui/material/TextField';
 import {
     TCityAutocompletePayload,
     getCityAutocomplete,
-} from '@api/geoapify/geoApify';
+} from '@api/geoapify/getCityAutocomplete';
 
 type TEvent = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
 
