@@ -24,19 +24,25 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
     const [leagueCity, setLeagueCity] = useState<TCitiesAutocompleteOption>({
         placeId: '',
         label: '',
+        city: '',
     });
 
     const onChangeCityLabel = (newValue: string | null) => {
         newValue === null
-            ? setLeagueCity({ placeId: '', label: '' })
-            : setLeagueCity((state) => ({ ...state, ['label']: newValue }));
+            ? setLeagueCity({ placeId: '', label: '', city: '' })
+            : setLeagueCity((state) => ({
+                  ...state,
+                  ['label']: newValue,
+                  ['city']: newValue,
+              }));
     };
 
     const onChooseCityOption = (
         newOption: TCitiesAutocompleteOption | null
     ) => {
-        newOption === null
-            ? setLeagueCity({ placeId: '', label: '' })
+        console.log(newOption);
+        return newOption === null
+            ? setLeagueCity({ placeId: '', label: '', city: '' })
             : setLeagueCity(() => newOption);
     };
 
@@ -46,26 +52,27 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
 
     const citiesQuery = useQuery(
         ['cities', leagueCity],
-        () => onSearchCity({ text: leagueCity.label }),
+        () => onSearchCity({ text: leagueCity.city }),
         {
             enabled: false,
         }
     );
 
     useEffect(() => {
-        if (leagueCity.placeId === '' && leagueCity.label !== '')
-            citiesQuery.refetch();
+        if (leagueCity.city !== '') citiesQuery.refetch();
     }, [leagueCity]);
 
     type TCitiesAutocompleteOption = {
         placeId: string;
         label: string;
+        city: string;
     };
     const cityAutocompleteOptions = (): TCitiesAutocompleteOption[] => {
         if (citiesQuery.data) {
             return citiesQuery.data.results.map((matchingResult) => ({
                 placeId: matchingResult.place_id,
                 label: matchingResult.formatted,
+                city: matchingResult.city,
             }));
         }
         return [];
