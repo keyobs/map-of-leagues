@@ -8,8 +8,12 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { leagueData } from '@templates/mocks';
 import DrawerCreateEditLeague from '@components/DrawerCreateEditLeague';
 
+import { TLeague } from '@templates/mocks';
+
 const TheMapPage = () => {
     const [isOpen, setIsOpen] = useState<boolean>(true);
+
+    const { markersList, addMarker } = useMarkers();
 
     const onClose = () => setIsOpen(false);
 
@@ -23,9 +27,13 @@ const TheMapPage = () => {
                 <Cockpit openNewLeagueDrawer={openNewLeagueDrawer} />
             </div>
             <div className="leafletContainer">
-                <Map />
+                <Map markersList={markersList} />
             </div>
-            <DrawerCreateEditLeague isOpen={isOpen} onClose={onClose} />
+            <DrawerCreateEditLeague
+                isOpen={isOpen}
+                onClose={onClose}
+                addMarker={addMarker}
+            />
         </div>
     );
 };
@@ -43,12 +51,16 @@ const Cockpit = (props: TCockpit) => {
     );
 };
 
-const Map = () => {
+type TMap = {
+    markersList: TLeague[] | [];
+};
+const Map = (props: TMap) => {
+    const { markersList } = props;
     const [activeMark, setActiveMark] = useState<string | null>(null);
 
     return (
         <MapContainer center={[47.4, 7.7]} zoom={5} scrollWheelZoom={false}>
-            {[...leagueData].map((league) => (
+            {markersList.map((league) => (
                 <Marker
                     key={league.id}
                     position={league.coordinates}
@@ -69,3 +81,13 @@ const Map = () => {
         </MapContainer>
     );
 };
+
+export function useMarkers() {
+    const [markersList, setMarkersList] = useState<TLeague[]>([...leagueData]);
+
+    const addMarker = (payload: TLeague) => {
+        setMarkersList((state) => [...state, payload]);
+    };
+
+    return { markersList, addMarker };
+}
