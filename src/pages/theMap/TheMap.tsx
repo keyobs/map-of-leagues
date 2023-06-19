@@ -2,6 +2,7 @@ import './theMap.less';
 import Button from '@mui/material/Button';
 import Drawer from '@mui/material/Drawer';
 import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
 
 import { useState, useEffect } from 'react';
 import { t } from 'i18next';
@@ -87,14 +88,16 @@ const CreateEditLeagueDrawer = (props: TCreateEditLeagueDrawer) => {
     const { isOpen, onClose } = props;
 
     const [leagueName, setLeagueName] = useState<string>('');
-    const [leagueCity, setLeagueCity] = useState<TCitiesAutocompleteOptions>({
+    const [leagueCity, setLeagueCity] = useState<TCitiesAutocompleteOption>({
         placeId: '',
         label: '',
     });
 
-    const onChangeCity = (event: TEvent) => {
-        const { value } = event.target;
-        setLeagueCity((state) => ({ ...state, label: value }));
+    const onChangeCityLabel = (newValue: string) => {
+        console.log('newValue', newValue);
+        newValue === null
+            ? setLeagueCity({ placeId: 'fluff', label: 'gimbam' })
+            : setLeagueCity((state) => ({ ...state, ['label']: newValue }));
     };
 
     const onSearchCity = (args: TCityAutocompletePayload) => {
@@ -113,11 +116,11 @@ const CreateEditLeagueDrawer = (props: TCreateEditLeagueDrawer) => {
         if (leagueCity.label !== '') citiesQuery.refetch();
     }, [leagueCity]);
 
-    type TCitiesAutocompleteOptions = {
+    type TCitiesAutocompleteOption = {
         placeId: string;
         label: string;
     };
-    const cityAutocompleteOptions = (): TCitiesAutocompleteOptions[] => {
+    const cityAutocompleteOptions = (): TCitiesAutocompleteOption[] => {
         if (citiesQuery.data) {
             return citiesQuery.data.results.map((matchingResult) => ({
                 placeId: matchingResult.place_id,
@@ -126,8 +129,6 @@ const CreateEditLeagueDrawer = (props: TCreateEditLeagueDrawer) => {
         }
         return [];
     };
-
-    console.log(cityAutocompleteOptions());
 
     return (
         <Drawer
@@ -153,15 +154,24 @@ const CreateEditLeagueDrawer = (props: TCreateEditLeagueDrawer) => {
                             shrink: true,
                         }}
                     />
-                    <TextField
-                        id="city"
-                        className="textField"
-                        label={t('league_form_field_label_city')}
-                        value={leagueCity.label}
-                        onChange={(event: TEvent) => onChangeCity(event)}
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
+
+                    <Autocomplete
+                        id="city_autocomplete"
+                        options={cityAutocompleteOptions()}
+                        getOptionLabel={(option) => option.label}
+                        value={leagueCity}
+                        isOptionEqualToValue={(option, value) =>
+                            option.placeId === value.placeId
+                        }
+                        onInputChange={(event, newValue) =>
+                            onChangeCityLabel(newValue)
+                        }
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label={t('league_form_field_label_city')}
+                            />
+                        )}
                     />
                 </form>
             </div>
