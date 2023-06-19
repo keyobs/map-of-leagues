@@ -1,14 +1,15 @@
 import './theMap.less';
+import Button from '@mui/material/Button';
+import Drawer from '@mui/material/Drawer';
+import TextField from '@mui/material/TextField';
 
 import { useState, useEffect } from 'react';
 import { t } from 'i18next';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { useQuery } from 'react-query';
 
 import { leagueData } from '@templates/mocks';
 
-import Button from '@mui/material/Button';
-import Drawer from '@mui/material/Drawer';
-import TextField from '@mui/material/TextField';
 import {
     TCityAutocompletePayload,
     getCityAutocomplete,
@@ -99,9 +100,19 @@ const CreateEditLeagueDrawer = (props: TCreateEditLeagueDrawer) => {
         return getCityAutocomplete(args);
     };
 
+    const citiesQuery = useQuery(
+        ['cities', leagueForm.city],
+        () => onSearchCity({ text: leagueForm.city }),
+        {
+            enabled: false,
+        }
+    );
+
     useEffect(() => {
-        if (leagueForm.city !== '') onSearchCity({ text: leagueForm.city });
+        if (leagueForm.city !== '') citiesQuery.refetch();
     }, [leagueForm]);
+
+    console.log(citiesQuery);
 
     return (
         <Drawer
