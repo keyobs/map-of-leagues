@@ -7,13 +7,18 @@ import NavBar from '@components/NavBar';
 import TheMapPage from '@pages/theMap/TheMap';
 import AboutPage from '@pages/About';
 import LoginPage from '@pages/Login';
+import { QueryClientProvider, QueryClient } from 'react-query';
+
+const queryClient = new QueryClient();
 
 function App() {
     return (
-        <div className="app">
-            <NavBar />
-            <Router />
-        </div>
+        <QueryClientProvider client={queryClient}>
+            <div className="app">
+                <NavBar />
+                <Router />
+            </div>
+        </QueryClientProvider>
     );
 }
 
