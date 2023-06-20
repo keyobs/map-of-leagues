@@ -1,9 +1,7 @@
 import './theMap.less';
-import Button from '@mui/material/Button';
 
-import { useState, useEffect } from 'react';
-import { t } from 'i18next';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { useState } from 'react';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 
 import { leagueData, TLeague } from '@templates/mocks';
 
@@ -15,7 +13,9 @@ const TheMapPage = () => {
 
     const { markersList, addMarker } = useMarkers();
 
-    const onClose = () => setIsOpen(false);
+    const onClose = () => {
+        setIsOpen(false);
+    };
 
     const openNewLeagueDrawer = () => {
         setIsOpen(true);
