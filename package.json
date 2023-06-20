@@ -1,6 +1,7 @@
 {
     "name": "map-of-leagues",
     "private": true,
+    "homepage": "https://keyobs.github.io/map-of-leagues",
     "version": "0.0.0",
     "type": "module",
     "scripts": {
@@ -8,7 +9,9 @@
         "build": "tsc && vite build",
         "preview": "vite preview",
         "postinstall": "husky install",
-        "lint:ts": "tslint --project tsconfig.json --config tslint.json"
+        "lint:ts": "tslint --project tsconfig.json --config tslint.json",
+        "predeploy": "yarn build",
+        "deploy": "gh-pages -d build"
     },
     "lint-staged": {
         "*.ts": "yarn lint:ts",
@@ -28,14 +31,14 @@
         "@emotion/react": "^11.10.5",
         "@emotion/styled": "^11.10.5",
         "@mui/material": "^5.11.8",
-        "i18next": "^22.4.9",
-        "i18next-browser-languagedetector": "^7.0.1",
+        "i18next": "^23.2.0",
+        "i18next-browser-languagedetector": "^7.0.2",
         "leaflet": "^1.9.3",
         "less": "^4.1.3",
         "lodash": "^4.17.21",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
-        "react-i18next": "^12.1.5",
+        "react-i18next": "^13.0.0",
         "react-leaflet": "^4.2.0",
         "react-query": "^3.39.3",
         "react-router": "^6.8.1",
