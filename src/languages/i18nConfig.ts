@@ -2,9 +2,9 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
-import i18nEN from './en.js';
-import i18nES from './es.js';
-import i18nFR from './fr.js';
+import i18nEN from './en';
+import i18nES from './es';
+import i18nFR from './fr';
 
 type TLocale = 'en' | 'fr' | 'es';
 
