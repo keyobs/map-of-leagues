@@ -7,7 +7,7 @@ const projectRootDir = path.resolve(__dirname);
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [react()],
-    base: './map-of-leagues/',
+    base: '/map-of-leagues/',
     resolve: {
         alias: {
             '@assets': path.resolve(projectRootDir, './src/assets'),
