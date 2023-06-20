@@ -11,7 +11,7 @@
         "postinstall": "husky install",
         "lint:ts": "tslint --project tsconfig.json --config tslint.json",
         "predeploy": "yarn build",
-        "deploy": "gh-pages -d build"
+        "deploy": "gh-pages -d dist"
     },
     "lint-staged": {
         "*.ts": "yarn lint:ts",
@@ -31,6 +31,7 @@
         "@emotion/react": "^11.10.5",
         "@emotion/styled": "^11.10.5",
         "@mui/material": "^5.11.8",
+        "gh-pages": "^5.0.0",
         "i18next": "^23.2.0",
         "i18next-browser-languagedetector": "^7.0.2",
         "leaflet": "^1.9.3",
