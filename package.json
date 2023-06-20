@@ -1,7 +1,7 @@
 {
     "name": "map-of-leagues",
     "private": true,
-    "homepage": "https://keyobs.github.io/map-of-leagues",
+    "homepage": "https://keyobs.github.io/map-of-leagues/",
     "version": "0.0.0",
     "type": "module",
     "scripts": {
