@@ -20,6 +20,12 @@ interface TCreateEditLeagueDrawer {
 	onClose: () => void;
 	addMarker: (marker: TLeague) => void;
 }
+type TCitiesAutocompleteOption = {
+	placeId: string;
+	label: string;
+	city: string;
+};
+
 const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
 	const { isOpen, onClose, addMarker } = props;
 
@@ -65,11 +71,6 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
 		[]
 	);
 
-	type TCitiesAutocompleteOption = {
-		placeId: string;
-		label: string;
-		city: string;
-	};
 	const cityAutocompleteOptions = (): TCitiesAutocompleteOption[] => {
 		if (locationsQuery.data) {
 			return locationsQuery.data.results.map((matchingResult) => ({
