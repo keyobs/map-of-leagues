@@ -60,14 +60,10 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
 		if (args.text.length > 0) return getCityAutocomplete(args);
 	};
 
-	const debounceGetCities = useCallback(
-		debounce(() => locationsQuery.refetch(), 500),
+	const debounceCityInput = useCallback(
+		debounce((newValue) => onChangeCityLabel(newValue), 500),
 		[]
 	);
-
-	useEffect(() => {
-		debounceGetCities();
-	}, [leagueLocation]);
 
 	type TCitiesAutocompleteOption = {
 		placeId: string;
@@ -155,7 +151,7 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
 						getOptionLabel={(option) => option.label}
 						value={leagueLocation}
 						isOptionEqualToValue={(option, value) => option.placeId === value.placeId}
-						onInputChange={(event, newValue) => onChangeCityLabel(newValue)}
+						onInputChange={(event, newValue) => debounceCityInput(newValue)}
 						onChange={(event, newValue) => onChooseCityOption(newValue)}
 						renderInput={(params) => (
 							<TextField
