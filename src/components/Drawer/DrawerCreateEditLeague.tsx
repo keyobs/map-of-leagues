@@ -98,10 +98,10 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
 		onClose();
 	}
 
-	const invalidFields = useMemo(() => {
-		if (!wasFormSubmitted) return [];
-		return checkPayloadValidity();
-	}, [leagueName, leagueLocation, city]);
+	const invalidFields = useMemo(
+		() => (wasFormSubmitted && checkPayloadValidity()) || [],
+		[leagueName, leagueLocation, city, wasFormSubmitted]
+	);
 
 	function checkPayloadValidity() {
 		const invalidFields = [];
