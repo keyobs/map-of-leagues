@@ -31,14 +31,16 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
 		city: ''
 	});
 
-	const citiesQuery = useQuery(['cities', leagueLocation], () => onSearchCity({ text: leagueLocation.city }), {
-		enabled: false
+	const locationsQuery = useQuery({
+		queryKey: ['locations'],
+		queryFn: () => onSearchCity({ text: leagueLocation.city }),
+		enabled: leagueLocation.label !== ''
 	});
 
 	const city = useMemo(() => {
-		if (citiesQuery.data == null) return;
-		return citiesQuery.data.results.find((result) => result.place_id === leagueLocation.placeId);
-	}, [citiesQuery.data, leagueLocation.placeId]);
+		if (locationsQuery.data == null) return;
+		return locationsQuery.data.results.find((result) => result.place_id === leagueLocation.placeId);
+	}, [locationsQuery.data, leagueLocation.placeId]);
 
 	const onChangeCityLabel = (newValue: string | null) => {
 		newValue === null
@@ -59,7 +61,7 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
 	};
 
 	const debounceGetCities = useCallback(
-		debounce(() => citiesQuery.refetch(), 500),
+		debounce(() => locationsQuery.refetch(), 500),
 		[]
 	);
 
@@ -73,8 +75,8 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
 		city: string;
 	};
 	const cityAutocompleteOptions = (): TCitiesAutocompleteOption[] => {
-		if (citiesQuery.data) {
-			return citiesQuery.data.results.map((matchingResult) => ({
+		if (locationsQuery.data) {
+			return locationsQuery.data.results.map((matchingResult) => ({
 				placeId: matchingResult.place_id,
 				label: matchingResult.formatted,
 				city: matchingResult.city
@@ -113,7 +115,7 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
 
 	function onSubmit() {
 		if (!wasFormSubmitted) setWasFormSubmitted(true);
-		if (citiesQuery.data == null) return;
+		if (locationsQuery.data == null) return;
 		if (invalidFields.length !== 0) return;
 		else {
 			const payload = buildFormPayload(city!);
