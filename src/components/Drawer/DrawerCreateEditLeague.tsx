@@ -5,18 +5,14 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
-import { t } from 'i18next';
-import { useQuery } from 'react-query';
-import { debounce } from 'lodash';
+import {useState, useEffect, useCallback, useMemo} from 'react';
+import {t} from 'i18next';
+import {useQuery} from 'react-query';
+import {debounce} from 'lodash';
 
-import {
-    TCityAutocompletePayload,
-    TLocationResult,
-    getCityAutocomplete,
-} from '@api/geoapify/getCityAutocomplete';
+import {TCityAutocompletePayload, TLocationResult, getCityAutocomplete} from '@api/geoapify/getCityAutocomplete';
 
-import { TLeague } from '@templates/mocks';
+import {TLeague} from '@templates/mocks';
 type TEvent = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
 
 interface TCreateEditLeagueDrawer {
@@ -25,48 +21,37 @@ interface TCreateEditLeagueDrawer {
     addMarker: (marker: TLeague) => void;
 }
 const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
-    const { isOpen, onClose, addMarker } = props;
+    const {isOpen, onClose, addMarker} = props;
 
     const [wasFormSubmitted, setWasFormSubmitted] = useState<boolean>(false);
     const [leagueName, setLeagueName] = useState<string>('');
-    const [leagueLocation, setLeagueLocation] =
-        useState<TCitiesAutocompleteOption>({
-            placeId: '',
-            label: '',
-            city: '',
-        });
+    const [leagueLocation, setLeagueLocation] = useState<TCitiesAutocompleteOption>({
+        placeId: '',
+        label: '',
+        city: ''
+    });
 
-    const citiesQuery = useQuery(
-        ['cities', leagueLocation],
-        () => onSearchCity({ text: leagueLocation.city }),
-        {
-            enabled: false,
-        }
-    );
+    const citiesQuery = useQuery(['cities', leagueLocation], () => onSearchCity({text: leagueLocation.city}), {
+        enabled: leagueLocation.city.length > 2 // geoapify api requires at least 3 characters
+    });
 
     const city = useMemo(() => {
         if (citiesQuery.data == null) return;
-        return citiesQuery.data.results.find(
-            (result) => result.place_id === leagueLocation.placeId
-        );
+        return citiesQuery.data.results.find((result) => result.place_id === leagueLocation.placeId);
     }, [citiesQuery.data, leagueLocation.placeId]);
 
     const onChangeCityLabel = (newValue: string | null) => {
         newValue === null
-            ? setLeagueLocation({ placeId: '', label: '', city: '' })
+            ? setLeagueLocation({placeId: '', label: '', city: ''})
             : setLeagueLocation((state) => ({
                   ...state,
                   ['label']: newValue,
-                  ['city']: newValue,
+                  ['city']: newValue
               }));
     };
 
-    const onChooseCityOption = (
-        newOption: TCitiesAutocompleteOption | null
-    ) => {
-        return newOption === null
-            ? setLeagueLocation({ placeId: '', label: '', city: '' })
-            : setLeagueLocation(() => newOption);
+    const onChooseCityOption = (newOption: TCitiesAutocompleteOption | null) => {
+        return newOption === null ? setLeagueLocation({placeId: '', label: '', city: ''}) : setLeagueLocation(() => newOption);
     };
 
     const onSearchCity = (args: TCityAutocompletePayload) => {
@@ -92,7 +77,7 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
             return citiesQuery.data.results.map((matchingResult) => ({
                 placeId: matchingResult.place_id,
                 label: matchingResult.formatted,
-                city: matchingResult.city,
+                city: matchingResult.city
             }));
         }
         return [];
@@ -102,13 +87,13 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
         return {
             name: leagueName,
             id: leagueLocation.placeId,
-            coordinates: [city.lat, city.lon],
+            coordinates: [city.lat, city.lon]
         };
     }
 
     function handleClose() {
         setLeagueName('');
-        setLeagueLocation({ placeId: '', label: '', city: '' });
+        setLeagueLocation({placeId: '', label: '', city: ''});
         setWasFormSubmitted(false);
         onClose();
     }
@@ -138,68 +123,51 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
     }
 
     return (
-        <Drawer
-            ModalProps={{ disableScrollLock: false }}
-            open={isOpen}
-            anchor="left"
-            onClose={handleClose}
-        >
-            <div className="leagueDrawer">
+        <Drawer ModalProps={{disableScrollLock: false}} open={isOpen} anchor='left' onClose={handleClose}>
+            <div className='leagueDrawer'>
                 <header>{t('league_form_title')}</header>
 
                 <form
                     style={{
                         display: 'flex',
                         flexDirection: 'column',
-                        gap: '20px',
+                        gap: '20px'
                     }}
                 >
                     <TextField
-                        id="name"
-                        className="textField"
+                        id='name'
+                        className='textField'
                         label={t('league_form_field_label_name')}
                         value={leagueName}
-                        onChange={(event: TEvent) =>
-                            setLeagueName(event.target.value)
-                        }
+                        onChange={(event: TEvent) => setLeagueName(event.target.value)}
                         InputLabelProps={{
-                            shrink: true,
+                            shrink: true
                         }}
                         error={invalidFields.includes('leagueName')}
-                        helperText={t(
-                            'league_form_field_label_name_error_message'
-                        )}
+                        helperText={t('league_form_field_label_name_error_message')}
                     />
 
                     <Autocomplete
-                        id="city_autocomplete"
+                        id='city_autocomplete'
                         options={cityAutocompleteOptions()}
                         getOptionLabel={(option) => option.label}
                         value={leagueLocation}
-                        isOptionEqualToValue={(option, value) =>
-                            option.placeId === value.placeId
-                        }
-                        onInputChange={(event, newValue) =>
-                            onChangeCityLabel(newValue)
-                        }
-                        onChange={(event, newValue) =>
-                            onChooseCityOption(newValue)
-                        }
+                        isOptionEqualToValue={(option, value) => option.placeId === value.placeId}
+                        onInputChange={(event, newValue) => onChangeCityLabel(newValue)}
+                        onChange={(event, newValue) => onChooseCityOption(newValue)}
                         renderInput={(params) => (
                             <TextField
                                 {...params}
                                 label={t('league_form_field_label_city')}
                                 error={invalidFields.includes('leagueLocation')}
-                                helperText={t(
-                                    'league_form_field_label_name_error_city'
-                                )}
+                                helperText={t('league_form_field_label_name_error_city')}
                             />
                         )}
                     />
                 </form>
 
-                <div className="actions">
-                    <Button variant="contained" onClick={onSubmit}>
+                <div className='actions'>
+                    <Button variant='contained' onClick={onSubmit}>
                         <span>{t('league_form_button_submit')}</span>
                     </Button>
                 </div>
