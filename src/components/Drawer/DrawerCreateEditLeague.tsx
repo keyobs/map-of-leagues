@@ -84,16 +84,20 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
         label: string;
         city: string;
     };
-    const cityAutocompleteOptions = (): TCitiesAutocompleteOption[] => {
+    const cityAutocompleteOptions = useMemo<TCitiesAutocompleteOption[]>(() => {
         if (citiesQuery.data) {
-            return citiesQuery.data.results.map((matchingResult) => ({
-                placeId: matchingResult.place_id,
-                label: matchingResult.formatted,
-                city: matchingResult.city
-            }));
+            const initialOption = leagueLocation.placeId === '' ? [leagueLocation] : [];
+            return [
+                ...initialOption,
+                ...citiesQuery.data.results.map((matchingResult) => ({
+                    placeId: matchingResult.place_id,
+                    label: matchingResult.formatted,
+                    city: matchingResult.city
+                }))
+            ];
         }
         return [];
-    };
+    }, [citiesQuery.data, leagueLocation]);
 
     function buildFormPayload(city: TLocationResult): TLeague {
         return {
@@ -134,6 +138,8 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
         }
     }
 
+    console.log('invalidFields', invalidFields);
+
     return (
         <Drawer
             ModalProps={{disableScrollLock: false}}
@@ -166,7 +172,7 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
 
                     <Autocomplete
                         id='city_autocomplete'
-                        options={cityAutocompleteOptions()}
+                        options={cityAutocompleteOptions}
                         getOptionLabel={(option) => option.label}
                         value={leagueLocation}
                         isOptionEqualToValue={(option, value) => option.placeId === value.placeId}
