@@ -10,7 +10,11 @@ import {t} from 'i18next';
 import {useQuery} from 'react-query';
 import {debounce} from 'lodash';
 
-import {TCityAutocompletePayload, TLocationResult, getCityAutocomplete} from '@api/geoapify/getCityAutocomplete';
+import {
+    TCityAutocompletePayload,
+    TLocationResult,
+    getCityAutocomplete
+} from '@api/geoapify/getCityAutocomplete';
 
 import {TLeague} from '@templates/mocks';
 type TEvent = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
@@ -31,13 +35,19 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
         city: ''
     });
 
-    const citiesQuery = useQuery(['cities', leagueLocation], () => onSearchCity({text: leagueLocation.city}), {
-        enabled: leagueLocation.city.length > 2 // geoapify api requires at least 3 characters
-    });
+    const citiesQuery = useQuery(
+        ['cities', leagueLocation],
+        () => onSearchCity({text: leagueLocation.city}),
+        {
+            enabled: leagueLocation.city != null && leagueLocation.city.length > 2 // geoapify api requires at least 3 characters
+        }
+    );
 
     const city = useMemo(() => {
         if (citiesQuery.data == null) return;
-        return citiesQuery.data.results.find((result) => result.place_id === leagueLocation.placeId);
+        return citiesQuery.data.results.find(
+            (result) => result.place_id === leagueLocation.placeId
+        );
     }, [citiesQuery.data, leagueLocation.placeId]);
 
     const onChangeCityLabel = (newValue: string | null) => {
@@ -51,7 +61,9 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
     };
 
     const onChooseCityOption = (newOption: TCitiesAutocompleteOption | null) => {
-        return newOption === null ? setLeagueLocation({placeId: '', label: '', city: ''}) : setLeagueLocation(() => newOption);
+        return newOption === null
+            ? setLeagueLocation({placeId: '', label: '', city: ''})
+            : setLeagueLocation(() => newOption);
     };
 
     const onSearchCity = (args: TCityAutocompletePayload) => {
@@ -123,7 +135,12 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
     }
 
     return (
-        <Drawer ModalProps={{disableScrollLock: false}} open={isOpen} anchor='left' onClose={handleClose}>
+        <Drawer
+            ModalProps={{disableScrollLock: false}}
+            open={isOpen}
+            anchor='left'
+            onClose={handleClose}
+        >
             <div className='leagueDrawer'>
                 <header>{t('league_form_title')}</header>
 
