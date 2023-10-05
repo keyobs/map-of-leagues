@@ -47,7 +47,7 @@ const Map = (props: TMap) => {
             {markersList.map((league) => (
                 <Marker
                     key={league.id}
-                    position={league.coordinates}
+                    position={[league.lat, league.lon]}
                     eventHandlers={{
                         click: () => {
                             setActiveMark(league.id);
