@@ -1,17 +1,17 @@
 import './theMap.less';
 
-import { useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import {useState} from 'react';
+import {MapContainer, TileLayer, Marker, Popup, useMap} from 'react-leaflet';
 
-import { leagueData, TLeague } from '@templates/mocks';
+import {leagueData, TLeague} from '@templates/mocks';
 
-import Cockpit from '@components/cockpit/Cockpit';
+import Cockpit from '@pages/theMap/cockpit/Cockpit';
 import DrawerCreateEditLeague from '@components/Drawer/DrawerCreateEditLeague';
 
 const TheMapPage = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
-    const { markersList, addMarker } = useMarkers();
+    const {markersList, addMarker} = useMarkers();
 
     const onClose = () => {
         setIsOpen(false);
@@ -22,18 +22,14 @@ const TheMapPage = () => {
     };
 
     return (
-        <div className="theMap">
-            <div className="cockpit">
+        <div className='theMap'>
+            <div className='cockpit'>
                 <Cockpit openNewLeagueDrawer={openNewLeagueDrawer} />
             </div>
-            <div className="leafletContainer">
+            <div className='leafletContainer'>
                 <Map markersList={markersList} />
             </div>
-            <DrawerCreateEditLeague
-                isOpen={isOpen}
-                onClose={onClose}
-                addMarker={addMarker}
-            />
+            <DrawerCreateEditLeague isOpen={isOpen} onClose={onClose} addMarker={addMarker} />
         </div>
     );
 };
@@ -43,7 +39,7 @@ type TMap = {
     markersList: TLeague[] | [];
 };
 const Map = (props: TMap) => {
-    const { markersList } = props;
+    const {markersList} = props;
     const [activeMark, setActiveMark] = useState<string | null>(null);
 
     return (
@@ -55,7 +51,7 @@ const Map = (props: TMap) => {
                     eventHandlers={{
                         click: () => {
                             setActiveMark(league.id);
-                        },
+                        }
                     }}
                 >
                     <Popup>{league.name}</Popup>
@@ -63,7 +59,7 @@ const Map = (props: TMap) => {
             ))}
 
             <TileLayer
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
                 attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             />
         </MapContainer>
@@ -77,5 +73,5 @@ export function useMarkers() {
         setMarkersList((state) => [...state, payload]);
     };
 
-    return { markersList, addMarker };
+    return {markersList, addMarker};
 }
