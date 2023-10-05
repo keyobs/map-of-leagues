@@ -26,17 +26,18 @@ interface TCreateEditLeagueDrawer {
     onClose: () => void;
     addMarker: (marker: TLeague) => void;
 }
-
+const initialLeagueLocation = {
+    placeId: '',
+    label: '',
+    city: ''
+};
 const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
     const {isOpen, onClose, addMarker} = props;
 
     const [wasFormSubmitted, setWasFormSubmitted] = useState<boolean>(false);
     const [leagueName, setLeagueName] = useState<string>('');
-    const [leagueLocation, setLeagueLocation] = useState<TCitiesAutocompleteOption>({
-        placeId: '',
-        label: '',
-        city: ''
-    });
+    const [leagueLocation, setLeagueLocation] =
+        useState<TCitiesAutocompleteOption>(initialLeagueLocation);
 
     const citiesQuery = useQuery(
         ['cities', leagueLocation],
@@ -131,7 +132,7 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
 
     function handleClose() {
         setLeagueName('');
-        setLeagueLocation({placeId: '', label: '', city: ''});
+        setLeagueLocation(initialLeagueLocation);
         setWasFormSubmitted(false);
         onClose();
     }
