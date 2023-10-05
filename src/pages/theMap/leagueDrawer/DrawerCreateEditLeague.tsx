@@ -17,6 +17,8 @@ import {
 } from '@api/geoapify/getCityAutocomplete';
 
 import {TLeague} from '@templates/mocks';
+import {checkPayloadValidity} from './useCheckForm';
+
 type TEvent = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
 
 interface TCreateEditLeagueDrawer {
@@ -24,6 +26,7 @@ interface TCreateEditLeagueDrawer {
     onClose: () => void;
     addMarker: (marker: TLeague) => void;
 }
+
 const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
     const {isOpen, onClose, addMarker} = props;
 
@@ -84,7 +87,7 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
         label: string;
         city: string;
     };
-    const cityAutocompleteOptions = useMemo<TCitiesAutocompleteOption[]>(() => {
+    const cityAutocompleteOptions: TCitiesAutocompleteOption[] = useMemo(() => {
         if (citiesQuery.data) {
             const initialOption = leagueLocation.placeId === '' ? [leagueLocation] : [];
             return [
@@ -103,8 +106,27 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
         return {
             name: leagueName,
             id: leagueLocation.placeId,
-            coordinates: [city.lat, city.lon]
+            lat: city?.lat,
+            lon: city?.lon
         };
+    }
+
+    const invalidFields = useMemo(() => {
+        if (!wasFormSubmitted) return [];
+        return checkPayloadValidity(buildFormPayload(city!));
+    }, [leagueName, leagueLocation, city, wasFormSubmitted]);
+
+    function onSubmit() {
+        if (!wasFormSubmitted) setWasFormSubmitted(true);
+        if (citiesQuery.data == null) return;
+        if (invalidFields.length !== 0) return;
+        else {
+            const payload = buildFormPayload(city!);
+            if (checkPayloadValidity(payload).length === 0) {
+                addMarker(payload);
+                handleClose();
+            }
+        }
     }
 
     function handleClose() {
@@ -113,32 +135,6 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
         setWasFormSubmitted(false);
         onClose();
     }
-
-    const invalidFields = useMemo(() => {
-        if (!wasFormSubmitted) return [];
-        return checkPayloadValidity();
-    }, [leagueName, leagueLocation, city]);
-
-    function checkPayloadValidity() {
-        const invalidFields = [];
-        if (leagueName === '') invalidFields.push('leagueName');
-        if (leagueLocation.label === '') invalidFields.push('leagueLocation');
-        if (city == null) invalidFields.push('cityQuery');
-        return invalidFields;
-    }
-
-    function onSubmit() {
-        if (!wasFormSubmitted) setWasFormSubmitted(true);
-        if (citiesQuery.data == null) return;
-        if (invalidFields.length !== 0) return;
-        else {
-            const payload = buildFormPayload(city!);
-            addMarker(payload);
-            handleClose();
-        }
-    }
-
-    console.log('invalidFields', invalidFields);
 
     return (
         <Drawer
@@ -167,7 +163,10 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
                             shrink: true
                         }}
                         error={invalidFields.includes('leagueName')}
-                        helperText={t('league_form_field_label_name_error_message')}
+                        helperText={
+                            invalidFields.includes('leagueName') &&
+                            t('league_form_field_label_name_error_message')
+                        }
                     />
 
                     <Autocomplete
@@ -183,7 +182,10 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
                                 {...params}
                                 label={t('league_form_field_label_city')}
                                 error={invalidFields.includes('leagueLocation')}
-                                helperText={t('league_form_field_label_name_error_city')}
+                                helperText={
+                                    invalidFields.includes('leagueLocation') &&
+                                    t('league_form_field_label_name_error_city')
+                                }
                             />
                         )}
                     />
