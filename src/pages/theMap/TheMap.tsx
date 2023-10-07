@@ -13,8 +13,6 @@ const TheMapPage = () => {
 
     const {markersList, addMarker} = useMarkers();
 
-    console.log('markersList', markersList);
-
     const onClose = () => {
         setIsOpen(false);
     };
@@ -25,9 +23,7 @@ const TheMapPage = () => {
 
     return (
         <div className='theMap'>
-            <div className='cockpit'>
-                <Cockpit openNewLeagueDrawer={openNewLeagueDrawer} />
-            </div>
+            <Cockpit openNewLeagueDrawer={openNewLeagueDrawer} />
             <div className='leafletContainer'>
                 <Map markersList={markersList} />
             </div>
