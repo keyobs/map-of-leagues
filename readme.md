@@ -25,8 +25,9 @@ Store it in your .env file.
 ---
 
 React 18 + typescript
+Vite
 
 Leaflet v1.9
-material-ui v5
 
-Vite
+material-ui v5
+antDesign (icons pack)
