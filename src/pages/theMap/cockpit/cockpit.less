@@ -1,9 +1,29 @@
 .cockpitContainer {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    background-color: #101035;
+    height: 90vh;
+    align-items: center;
 
     .cockpit {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        position: fixed;
+        z-index: 100;
+        background-color: #101035;
+    }
+
+    .drawer {
+        position: absolute;
+        z-index: 10;
+        background-color: aliceblue;
+
+        &.hidden {
+            left: -660px;
+            transition: left.3s ease-in-out;
+        }
+        &.visible {
+            left: 50px;
+            transition: left 0.3s ease-in;
+        }
     }
 }

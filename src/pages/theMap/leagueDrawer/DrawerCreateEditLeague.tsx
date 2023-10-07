@@ -1,6 +1,5 @@
 import './drawerCreateEditLeague.less';
 
-import Drawer from '@mui/material/Drawer';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
@@ -9,6 +8,8 @@ import {useState, useEffect, useCallback, useMemo} from 'react';
 import {t} from 'i18next';
 import {useQuery} from 'react-query';
 import {debounce} from 'lodash';
+
+import {useMarkers} from '@pages/theMap/TheMap';
 
 import {
     TCityAutocompletePayload,
@@ -32,7 +33,8 @@ const initialLeagueLocation = {
     city: ''
 };
 const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
-    const {isOpen, onClose, addMarker} = props;
+    const {isOpen, onClose} = props;
+    const {addMarker} = useMarkers();
 
     const [wasFormSubmitted, setWasFormSubmitted] = useState<boolean>(false);
     const [leagueName, setLeagueName] = useState<string>('');
@@ -138,67 +140,60 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
     }
 
     return (
-        <Drawer
-            ModalProps={{disableScrollLock: false}}
-            open={isOpen}
-            anchor='left'
-            onClose={handleClose}
-        >
-            <div className='leagueDrawer'>
-                <header>{t('league_form_title')}</header>
+        <div className='leagueDrawer'>
+            <header>{t('league_form_title')}</header>
 
-                <form
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '20px'
+            <form
+                style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '20px'
+                }}
+            >
+                <TextField
+                    id='name'
+                    className='textField'
+                    label={t('league_form_field_label_name')}
+                    value={leagueName}
+                    onChange={(event: TEvent) => setLeagueName(event.target.value)}
+                    InputLabelProps={{
+                        shrink: true
                     }}
-                >
-                    <TextField
-                        id='name'
-                        className='textField'
-                        label={t('league_form_field_label_name')}
-                        value={leagueName}
-                        onChange={(event: TEvent) => setLeagueName(event.target.value)}
-                        InputLabelProps={{
-                            shrink: true
-                        }}
-                        error={invalidFields.includes('leagueName')}
-                        helperText={
-                            invalidFields.includes('leagueName') &&
-                            t('league_form_field_label_name_error_message')
-                        }
-                    />
+                    error={invalidFields.includes('leagueName')}
+                    helperText={
+                        invalidFields.includes('leagueName') &&
+                        t('league_form_field_label_name_error_message')
+                    }
+                />
 
-                    <Autocomplete
-                        id='city_autocomplete'
-                        options={cityAutocompleteOptions}
-                        getOptionLabel={(option) => option.label}
-                        value={leagueLocation}
-                        isOptionEqualToValue={(option, value) => option.placeId === value.placeId}
-                        onInputChange={(event, newValue) => onChangeCityLabel(newValue)}
-                        onChange={(event, newValue) => onChooseCityOption(newValue)}
-                        renderInput={(params) => (
-                            <TextField
-                                {...params}
-                                label={t('league_form_field_label_city')}
-                                error={invalidFields.includes('leagueLocation')}
-                                helperText={
-                                    invalidFields.includes('leagueLocation') &&
-                                    t('league_form_field_label_name_error_city')
-                                }
-                            />
-                        )}
-                    />
-                </form>
+                <Autocomplete
+                    id='city_autocomplete'
+                    options={cityAutocompleteOptions}
+                    getOptionLabel={(option) => option.label}
+                    value={leagueLocation}
+                    isOptionEqualToValue={(option, value) => option.placeId === value.placeId}
+                    onInputChange={(event, newValue) => onChangeCityLabel(newValue)}
+                    onChange={(event, newValue) => onChooseCityOption(newValue)}
+                    renderInput={(params) => (
+                        <TextField
+                            {...params}
+                            label={t('league_form_field_label_city')}
+                            error={invalidFields.includes('leagueLocation')}
+                            helperText={
+                                invalidFields.includes('leagueLocation') &&
+                                t('league_form_field_label_name_error_city')
+                            }
+                        />
+                    )}
+                />
+            </form>
 
-                <div className='actions'>
-                    <Button variant='contained' onClick={onSubmit}>
-                        <span>{t('league_form_button_submit')}</span>
-                    </Button>
-                </div>
+            <div className='actions'>
+                <Button variant='contained' onClick={onSubmit}>
+                    <span>{t('league_form_button_submit')}</span>
+                </Button>
             </div>
-        </Drawer>
+        </div>
     );
 };
 

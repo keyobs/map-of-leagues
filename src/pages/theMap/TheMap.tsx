@@ -6,28 +6,16 @@ import {MapContainer, TileLayer, Marker, Popup, useMap, ZoomControl} from 'react
 import {leagueData, TLeague} from '@templates/mocks';
 
 import Cockpit from '@pages/theMap/cockpit/Cockpit';
-import DrawerCreateEditLeague from '@pages/theMap/leagueDrawer/DrawerCreateEditLeague';
 
 const TheMapPage = () => {
-    const [isOpen, setIsOpen] = useState<boolean>(false);
-
     const {markersList, addMarker} = useMarkers();
-
-    const onClose = () => {
-        setIsOpen(false);
-    };
-
-    const openNewLeagueDrawer = () => {
-        setIsOpen(true);
-    };
 
     return (
         <div className='theMap'>
-            <Cockpit openNewLeagueDrawer={openNewLeagueDrawer} />
+            <Cockpit />
             <div className='leafletContainer'>
                 <Map markersList={markersList} />
             </div>
-            <DrawerCreateEditLeague isOpen={isOpen} onClose={onClose} addMarker={addMarker} />
         </div>
     );
 };

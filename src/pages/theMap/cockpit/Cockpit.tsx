@@ -3,23 +3,32 @@ import AddSquareIcon from '@ant-design/icons/PlusSquareOutlined';
 
 import {useTranslation} from 'react-i18next';
 
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import {Icon} from '@mui/material';
+import DrawerCreateEditLeague from '@pages/theMap/leagueDrawer/DrawerCreateEditLeague';
 
-interface TCockpit {
-    openNewLeagueDrawer: () => void;
-}
-const Cockpit = (props: TCockpit) => {
+import IconButton from '@mui/material/IconButton';
+import {useState} from 'react';
+
+const Cockpit = () => {
     const {t} = useTranslation();
-    const {openNewLeagueDrawer} = props;
+
+    const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
+
+    const onClickDrawer = () => {
+        setIsDrawerOpen(!isDrawerOpen);
+    };
 
     return (
         <div className='cockpitContainer'>
             <div className='cockpit'>
-                <IconButton onClick={() => openNewLeagueDrawer()}>
-                    <AddSquareIcon style={{fontSize: '34px', color: 'aliceblue'}} />
+                <IconButton onClick={() => onClickDrawer()}>
+                    <AddSquareIcon style={{fontSize: '34px', color: 'aliceblue'}} rev={undefined} />
                 </IconButton>
+            </div>
+            <div className={`drawer ${isDrawerOpen ? 'visible' : 'hidden'}`}>
+                <DrawerCreateEditLeague
+                    isOpen={isDrawerOpen}
+                    onClose={() => setIsDrawerOpen(false)}
+                />
             </div>
         </div>
     );
