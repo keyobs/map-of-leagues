@@ -9,8 +9,6 @@ import {t} from 'i18next';
 import {useQuery} from 'react-query';
 import {debounce} from 'lodash';
 
-import {useMarkers} from '@pages/theMap/TheMap';
-
 import {
     TCityAutocompletePayload,
     TLocationResult,
@@ -33,8 +31,7 @@ const initialLeagueLocation = {
     city: ''
 };
 const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
-    const {isOpen, onClose} = props;
-    const {addMarker} = useMarkers();
+    const {isOpen, onClose, addMarker} = props;
 
     const [wasFormSubmitted, setWasFormSubmitted] = useState<boolean>(false);
     const [leagueName, setLeagueName] = useState<string>('');

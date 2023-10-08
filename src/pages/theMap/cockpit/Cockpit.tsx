@@ -1,16 +1,20 @@
 import './cockpit.less';
-import AddSquareIcon from '@ant-design/icons/PlusSquareOutlined';
-
-import {useTranslation} from 'react-i18next';
-
-import DrawerCreateEditLeague from '@pages/theMap/leagueDrawer/DrawerCreateEditLeague';
 
 import IconButton from '@mui/material/IconButton';
+import AddSquareIcon from '@ant-design/icons/PlusSquareOutlined';
+
 import {useState} from 'react';
+import {useTranslation} from 'react-i18next';
 
-const Cockpit = () => {
+import {TLeague} from '@templates/mocks';
+import DrawerCreateEditLeague from '@pages/theMap/leagueDrawer/DrawerCreateEditLeague';
+
+type TCockpit = {
+    addMarker: (marker: TLeague) => void;
+};
+const Cockpit = (props: TCockpit) => {
     const {t} = useTranslation();
-
+    const {addMarker} = props;
     const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
 
     const onClickDrawer = () => {
@@ -26,6 +30,7 @@ const Cockpit = () => {
             </div>
             <div className={`drawer ${isDrawerOpen ? 'visible' : 'hidden'}`}>
                 <DrawerCreateEditLeague
+                    addMarker={addMarker}
                     isOpen={isDrawerOpen}
                     onClose={() => setIsDrawerOpen(false)}
                 />

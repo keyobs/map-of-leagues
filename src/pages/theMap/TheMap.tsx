@@ -12,7 +12,7 @@ const TheMapPage = () => {
 
     return (
         <div className='theMap'>
-            <Cockpit />
+            <Cockpit addMarker={addMarker} />
             <div className='leafletContainer'>
                 <Map markersList={markersList} />
             </div>
@@ -57,15 +57,15 @@ export function useMarkers() {
     const [markersList, setMarkersList] = useState<TLeague[]>([...leagueData]);
 
     const addMarker = (payload: TLeague) => {
-        const newLeague = {...payload, id: getNextId(markersList)}; //while waiting for the back
+        const newLeague = {...payload, id: getNextId(markersList.reverse()[0].id)}; //while waiting for the back
         setMarkersList((state) => [...state, newLeague]);
     };
 
     return {markersList, addMarker};
 }
 
-function getNextId(list: TLeague[]) {
-    const highestId = list.length;
-    const newId = (highestId + 1).toString().padStart(4, '0');
+function getNextId(list: string) {
+    const lastId = parseInt(list, 10);
+    const newId = (lastId + 1).toString().padStart(4, '0');
     return newId;
 }
