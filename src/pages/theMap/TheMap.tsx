@@ -56,7 +56,10 @@ const Map = (props: TMap) => {
 export function useMarkers() {
     const [markersList, setMarkersList] = useState<TLeague[]>([...leagueData]);
 
+    console.log('markersList', markersList);
+
     const addMarker = (payload: TLeague) => {
+        console.log('addMarker', payload);
         const newLeague = {...payload, id: getNextId(markersList.reverse()[0].id)}; //while waiting for the back
         setMarkersList((state) => [...state, newLeague]);
     };
