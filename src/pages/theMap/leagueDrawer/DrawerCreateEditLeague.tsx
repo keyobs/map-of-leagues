@@ -107,8 +107,9 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
 
     function buildFormPayload(city: TLocationResult): TLeague {
         return {
+            id: '',
             name: leagueName,
-            id: leagueLocation.placeId,
+            geoapifyId: leagueLocation.placeId,
             lat: city?.lat,
             lon: city?.lon
         };

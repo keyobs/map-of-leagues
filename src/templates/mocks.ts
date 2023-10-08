@@ -1,10 +1,3 @@
-export type TLeague = {
-    id: string;
-    name: string;
-    lat: number;
-    lon: number;
-};
-
 export const leagueData: TLeague[] = [
     {id: '0001', name: 'RD Nice', lat: 43.710175, lon: 7.261953},
     {id: '0002', name: 'RD Bordeaux', lat: 44.837788, lon: -0.57918},
@@ -14,3 +7,23 @@ export const leagueData: TLeague[] = [
     {id: '0006', name: 'RD Hull', lat: 42.2861, lon: -70.8835},
     {id: '0007', name: 'RD Bergame', lat: 45.695, lon: 9.67}
 ];
+
+export type TLeague = {
+    id: string;
+    name: string;
+    lat: number;
+    lon: number;
+    geoapifyId: string;
+};
+
+/* export type TTeam = {
+    id: string;
+    name: string;
+    level: 'n/a' | 'regional' | 'national' | 'international' | 'world' | 'unknown';
+    type: 'A' | 'B' | 'C' | 'recreationnal';
+    isWFTDA: boolean;
+    isMRDA: boolean;
+    isJRDA: boolean;
+    isTravelTeam: boolean;
+    isHomeTeam: boolean;
+}; */
