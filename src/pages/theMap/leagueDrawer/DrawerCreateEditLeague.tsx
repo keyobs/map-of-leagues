@@ -3,6 +3,9 @@ import './drawerCreateEditLeague.less';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+
+import CloseIcon from '@ant-design/icons/CloseOutlined';
 
 import {useState, useEffect, useCallback, useMemo} from 'react';
 import {t} from 'i18next';
@@ -138,7 +141,12 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
 
     return (
         <div className='leagueDrawer'>
-            <header>{t('league_form_title')}</header>
+            <div className='formHeader'>
+                <header>{t('league_form_title')}</header>
+                <IconButton onClick={handleClose}>
+                    <CloseIcon style={{color: 'aliceblue', marginRight: '10px'}} rev='' />
+                </IconButton>
+            </div>
 
             <form
                 style={{
@@ -186,7 +194,7 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
             </form>
 
             <div className='actions'>
-                <Button variant='contained' onClick={onSubmit}>
+                <Button variant='contained' onClick={onSubmit} sx={{background: '#101035'}}>
                     <span>{t('league_form_button_submit')}</span>
                 </Button>
             </div>
