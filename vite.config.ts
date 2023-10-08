@@ -7,6 +7,7 @@ const projectRootDir = path.resolve(__dirname);
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [react()],
+    base: 'https://keyobs.github.io/map-of-leagues/',
     resolve: {
         alias: {
             '@assets': path.resolve(projectRootDir, './src/assets'),
@@ -17,6 +18,9 @@ export default defineConfig({
         },
     },
     build: {
+        commonjsOptions: {
+            transformMixedEsModules: true,
+        },
         rollupOptions: {
             output: {
                 manualChunks(id) {
