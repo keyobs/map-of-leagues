@@ -40,6 +40,7 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
     const [leagueName, setLeagueName] = useState<string>('');
     const [leagueLocation, setLeagueLocation] =
         useState<TCitiesAutocompleteOption>(initialLeagueLocation);
+    const [selectedLocation, setSeletedLocation] = useState<TLocationResult | null>(null); //useState vs useMemo because usequery & geoapify inconsistency responses
 
     const citiesQuery = useQuery(
         ['cities', leagueLocation],
@@ -49,12 +50,13 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
         }
     );
 
-    const city = useMemo(() => {
-        if (citiesQuery.data == null) return;
-        return citiesQuery.data.results.find(
-            (result) => result.place_id === leagueLocation.placeId
-        );
-    }, [citiesQuery.data, leagueLocation.placeId]);
+    const findCity = useCallback(
+        (placeId: string) => {
+            if (citiesQuery.data == null) return;
+            return citiesQuery.data.results.find((result) => result.place_id === placeId);
+        },
+        [citiesQuery.data]
+    );
 
     const onChangeCityLabel = (newValue: string | null) => {
         newValue === null
@@ -67,9 +69,13 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
     };
 
     const onChooseCityOption = (newOption: TCitiesAutocompleteOption | null) => {
-        return newOption === null
-            ? setLeagueLocation({placeId: '', label: '', city: ''})
-            : setLeagueLocation(() => newOption);
+        if (newOption == null) {
+            setLeagueLocation({placeId: '', label: '', city: ''});
+            setSeletedLocation(null);
+        } else {
+            setLeagueLocation(() => newOption);
+            setSeletedLocation(findCity(newOption.placeId));
+        }
     };
 
     const onSearchCity = (args: TCityAutocompletePayload) => {
@@ -117,15 +123,15 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
 
     const invalidFields = useMemo(() => {
         if (!wasFormSubmitted) return [];
-        return checkPayloadValidity(buildFormPayload(city!));
-    }, [leagueName, leagueLocation, city, wasFormSubmitted]);
+        return checkPayloadValidity(buildFormPayload(selectedLocation!));
+    }, [leagueName, leagueLocation, selectedLocation, wasFormSubmitted]);
 
     function onSubmit() {
         if (!wasFormSubmitted) setWasFormSubmitted(true);
         if (citiesQuery.data == null) return;
         if (invalidFields.length !== 0) return;
         else {
-            const payload = buildFormPayload(city!);
+            const payload = buildFormPayload(selectedLocation!);
             if (checkPayloadValidity(payload).length === 0) {
                 addMarker(payload);
                 handleClose();
