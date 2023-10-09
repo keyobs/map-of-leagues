@@ -10,15 +10,15 @@ const AboutPage = () => {
             <h3>Techs</h3>
             {t('about_dev_state')}
             <p>
-                Front <br />
+                <b>Front</b> <br />
                 React + typescript <br />
                 TanStack Query <br />
                 <br />
-                Back <br />
+                <b>Back</b> <br />
                 <i>... to be continued</i> <br />
             </p>
             <p>
-                {t('about_external_help')}
+                <b>{t('about_external_help')}</b>
                 <br />
                 external api :{' '}
                 <a href='https://www.geoapify.com/' target='_blank'>
