@@ -1,8 +1,25 @@
 import './about.less';
+
+import {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
+
+import {getRepoMainActivity} from '@api/github/getGithubInfo';
 
 const AboutPage = () => {
     const {t} = useTranslation();
+    const [lastActivity, setLastActivity] = useState<string>('');
+
+    useEffect(() => {
+        async function getLastActivity() {
+            getRepoMainActivity().then((data) => {
+                setLastActivity(data);
+            });
+        }
+        getLastActivity();
+    }, []);
+
+    console.log('lastActivity', lastActivity);
+
     return (
         <div className='about'>
             <h3>{t('about_teaser_title')}</h3>
