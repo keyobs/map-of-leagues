@@ -1,4 +1,4 @@
-export async function getRepoMainActivity() {
+export async function getRepoMainActivity(): Promise<string> {
     const owner = import.meta.env.VITE_GITHUB_OWNER;
     const repo = import.meta.env.VITE_GITHUB_REPO;
 
