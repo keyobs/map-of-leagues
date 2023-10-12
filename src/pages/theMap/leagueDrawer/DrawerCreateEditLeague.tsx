@@ -40,7 +40,8 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
     const [leagueName, setLeagueName] = useState<string>('');
     const [leagueLocation, setLeagueLocation] =
         useState<TCitiesAutocompleteOption>(initialLeagueLocation);
-    const [selectedLocation, setSeletedLocation] = useState<TLocationResult | null>(null); //useState vs useMemo because usequery & geoapify inconsistency responses
+
+    const [selectedLocation, setSelectedLocation] = useState<TLocationResult | null>(null); //useState vs useMemo because usequery & geoapify inconsistency responses
 
     const citiesQuery = useQuery(
         ['cities', leagueLocation],
@@ -71,10 +72,11 @@ const DrawerCreateEditLeague = (props: TCreateEditLeagueDrawer) => {
     const onChooseCityOption = (newOption: TCitiesAutocompleteOption | null) => {
         if (newOption == null) {
             setLeagueLocation({placeId: '', label: '', city: ''});
-            setSeletedLocation(null);
+            setSelectedLocation(null);
         } else {
-            setLeagueLocation(() => newOption);
-            setSeletedLocation(findCity(newOption.placeId));
+            setLeagueLocation(newOption);
+            const city = findCity(newOption.placeId);
+            setSelectedLocation(city !== undefined ? city : null);
         }
     };
 
