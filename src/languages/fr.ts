@@ -19,7 +19,8 @@ const i18nFR = {
     interactive qui permettra aux visiteurs d'accèder à cette fiche d'information.`,
     about_dev_state: 'League of Map est en cours de développement.',
     about_external_help: `Avec de l'aide !`,
-    about_disclaimer: `Ce site est un projet personnel, il n'est pas affilié à la WFTDA, la MRDA ou la JRDA.`
+    about_disclaimer: `Ce site est un projet personnel, il n'est pas affilié à la WFTDA, la MRDA ou la JRDA.`,
+    about_last_contribution: `Dernière mise à jour:`
 };
 
 export default i18nFR;

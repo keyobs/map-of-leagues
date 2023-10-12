@@ -18,7 +18,8 @@ export const i18nES = {
     que permitirá a los visitantes acceder a esta ficha de información.`,
     about_dev_state: 'League of Map aún está en fase de desarrollo',
     about_external_help: `Con ayuda !`,
-    about_disclaimer: `Este sitio es un proyecto personal, no está afiliado a WFTDA, MRDA o JRDA`
+    about_disclaimer: `Este sitio es un proyecto personal, no está afiliado a WFTDA, MRDA o JRDA`,
+    about_last_contribution: `Última actualización:`
 };
 
 export default i18nES;

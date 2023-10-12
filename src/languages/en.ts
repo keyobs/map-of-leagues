@@ -17,7 +17,8 @@ const i18nEN = {
     interactive map, allowing visitors to access this information sheet.`,
     about_dev_state: 'League of Map is still in development phase.',
     about_external_help: `With help !`,
-    about_disclaimer: `This site is a personal project, it is not affiliated with WFTDA, MRDA or JRDA.`
+    about_disclaimer: `This site is a personal project, it is not affiliated with WFTDA, MRDA or JRDA.`,
+    about_last_contribution: `Last update:`
 };
 
 export default i18nEN;
